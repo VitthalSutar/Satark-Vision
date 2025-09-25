@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>URL Scanner</h2>
+<form method="POST" action="{{ url_for('scan_url') }}" class="mb-4">
+    <div class="input-group">
+        <input type="url" class="form-control" name="url" placeholder="Enter URL to scan" required>
+        <button type="submit" class="btn btn-primary">Scan URL</button>
+    </div>
+</form>
+
+<h3>Scan History</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for scan in history %}
+            <tr>
+                <td>{{ scan.url }}</td>
+                <td>
+                    {% if scan.result == 'Phishing' %}
+                        <span class="text-danger">{{ scan.result }}</span>
+                    {% else %}
+                        <span class="text-success">{{ scan.result }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

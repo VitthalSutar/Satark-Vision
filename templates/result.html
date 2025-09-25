@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Scan Result{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2>Scan Result</h2>
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ url }}</h5>
+            {% if is_phishing %}
+                <div class="alert alert-danger">
+                    This URL is potentially dangerous and might be a phishing attempt!
+                </div>
+            {% else %}
+                <div class="alert alert-success">
+                    This URL appears to be genuine.
+                </div>
+            {% endif %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Scan Another URL</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
