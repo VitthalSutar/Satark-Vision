@@ -3,13 +3,62 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1>Welcome to Satark Vision</h1>
-    <p class="lead">Protect yourself from phishing attacks by scanning suspicious URLs</p>
-    {% if 'user' in session %}
-        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
-    {% else %}
-        <a href="{{ url_for('login') }}" class="btn btn-primary">Get Started</a>
-    {% endif %}
+<div class="row justify-content-center page-transition">
+    <div class="col-lg-10 text-center">
+        <div class="glass-card glass-gradient mb-5">
+            <h1 class="display-4 mb-4">Welcome to Satark Vision</h1>
+            <p class="lead">Protect yourself from phishing attacks by scanning suspicious URLs</p>
+            {% if 'user' in session %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-custom btn-primary btn-lg">
+                    <i class='bx bx-shield-quarter me-2'></i>Go to Dashboard
+                </a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-custom btn-primary btn-lg">
+                    <i class='bx bx-lock-open-alt me-2'></i>Get Started
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="row mt-5 g-4">
+            <div class="col-md-4">
+                <div class="feature-card glass-gradient h-100">
+                    <i class='bx bx-shield-quarter bx-lg mb-3'></i>
+                    <h3>Advanced Protection</h3>
+                    <p>State-of-the-art ML algorithms to detect phishing attempts</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card glass-gradient h-100">
+                    <i class='bx bx-search-alt bx-lg mb-3'></i>
+                    <h3>Real-time Scanning</h3>
+                    <p>Instant URL analysis and threat detection</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card glass-gradient h-100">
+                    <i class='bx bx-history bx-lg mb-3'></i>
+                    <h3>Scan History</h3>
+                    <p>Track and monitor your URL scanning history</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card glass-gradient mt-5">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="stats-counter" data-target="1000">0</div>
+                    <p>URLs Scanned</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-counter" data-target="950">0</div>
+                    <p>Threats Detected</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-counter" data-target="500">0</div>
+                    <p>Active Users</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

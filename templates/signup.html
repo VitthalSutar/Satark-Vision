@@ -3,20 +3,47 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
+<div class="row justify-content-center page-transition">
     <div class="col-md-6">
-        <h2 class="mb-4">Sign Up</h2>
-        <form method="POST">
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+        <div class="glass-card">
+            <div class="text-center mb-4">
+                <i class='bx bxs-user-plus bx-lg' style="color: #007bff;"></i>
+                <h2 class="mt-3">Create Account</h2>
+                <p class="text-muted">Join Satark Vision to protect against phishing</p>
             </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+            
+            <form method="POST" class="needs-validation" novalidate>
+                <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0">
+                            <i class='bx bx-envelope'></i>
+                        </span>
+                        <input type="email" class="form-control border-start-0" id="email" name="email" 
+                               placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0">
+                            <i class='bx bx-lock-alt'></i>
+                        </span>
+                        <input type="password" class="form-control border-start-0" id="password" 
+                               name="password" placeholder="Choose a password" required>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-custom btn-primary">
+                        <i class='bx bx-user-plus me-2'></i>Create Account
+                    </button>
+                </div>
+            </form>
+            
+            <div class="text-center mt-4">
+                <p class="mb-0">Already have an account? 
+                    <a href="{{ url_for('login') }}" class="text-primary">Login</a>
+                </p>
             </div>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

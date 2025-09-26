@@ -1,38 +1,141 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Satark Vision - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main.container {
+            flex: 1 0 auto;
+        }
+        footer {
+            flex-shrink: 0;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+        <span id="themeIcon" class="animated-icon">🌙</span>
+    </button>
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-background shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="/">Satark Vision</a>
-            <div class="navbar-nav">
-                {% if 'user' in session %}
-                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                {% else %}
-                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                    <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
-                {% endif %}
+            <a class="navbar-brand fw-bold" href="/">Satark Vision</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if 'user' in session %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a></li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Scanning URL for potential threats...</p>
+        </div>
+    </div>
+
+    <main class="container py-4">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-info">{{ message }}</div>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="bg-light text-center text-muted py-3 border-top">
+        <div class="container">
+            <small>&copy; {{ 2025 }} Satark Vision. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="scrollToTop" title="Go to top">
+        <i class='bx bx-up-arrow-alt'></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Dark mode toggle logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        function setDarkMode(on) {
+            document.body.classList.toggle('dark-mode', on);
+            if (on) {
+                themeIcon.innerHTML = '<i class="bx bx-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.innerHTML = '<i class="bx bx-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        themeToggle.addEventListener('click', () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        });
+        // On load, set theme from localStorage
+        if (localStorage.getItem('theme') === 'dark') {
+            setDarkMode(true);
+        }
+
+        // Loading animation logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlScannerForm = document.querySelector('form[action*="scan_url"]');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            if (urlScannerForm) {
+                urlScannerForm.addEventListener('submit', function(e) {
+                    // Validate URL before showing loading
+                    const urlInput = this.querySelector('input[type="url"]');
+                    if (urlInput && urlInput.value) {
+                        try {
+                            new URL(urlInput.value);
+                            // Show loading overlay with animation
+                            loadingOverlay.style.display = 'flex';
+                            loadingOverlay.style.opacity = '0';
+                            requestAnimationFrame(() => {
+                                loadingOverlay.style.transition = 'opacity 0.3s ease';
+                                loadingOverlay.style.opacity = '1';
+                            });
+                        } catch (err) {
+                            e.preventDefault();
+                            alert('Please enter a valid URL');
+                        }
+                    }
+                });
+            }
+
+            // Initialize loading overlay
+            if (loadingOverlay) {
+                loadingOverlay.style.opacity = '0';
+                loadingOverlay.style.transition = 'opacity 0.3s ease';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -3,37 +3,76 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2>URL Scanner</h2>
-<form method="POST" action="{{ url_for('scan_url') }}" class="mb-4">
-    <div class="input-group">
-        <input type="url" class="form-control" name="url" placeholder="Enter URL to scan" required>
-        <button type="submit" class="btn btn-primary">Scan URL</button>
+<div class="page-transition">
+    <div class="glass-card glass-gradient mb-4">
+        <div class="d-flex align-items-center mb-4">
+            <i class='bx bx-scan bx-lg me-3' style="color: #007bff;"></i>
+            <div>
+                <h2 class="mb-0">URL Scanner</h2>
+                <p class="text-muted mb-0">Enter a URL to check for phishing attempts</p>
+            </div>
+        </div>
+        
+        <form method="POST" action="{{ url_for('scan_url') }}" class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0">
+                    <i class='bx bx-link'></i>
+                </span>
+                <input type="url" class="form-control border-start-0" name="url" 
+                       placeholder="Enter URL to scan" required>
+                <button type="submit" class="btn btn-custom btn-primary">
+                    <i class='bx bx-search-alt me-2'></i>Scan URL
+                </button>
+            </div>
+        </form>
     </div>
-</form>
 
-<h3>Scan History</h3>
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>URL</th>
-                <th>Result</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for scan in history %}
-            <tr>
-                <td>{{ scan.url }}</td>
-                <td>
-                    {% if scan.result == 'Phishing' %}
-                        <span class="text-danger">{{ scan.result }}</span>
-                    {% else %}
-                        <span class="text-success">{{ scan.result }}</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="glass-card glass-gradient">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h3 class="mb-0">Scan History</h3>
+                <p class="text-muted mb-0">Your recent URL scan results</p>
+            </div>
+            <i class='bx bx-history bx-sm' style="color: #007bff;"></i>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col"><i class='bx bx-link-alt me-2'></i>URL</th>
+                        <th scope="col"><i class='bx bx-shield-quarter me-2'></i>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for scan in history %}
+                    <tr class="align-middle">
+                        <td class="text-truncate" style="max-width: 300px;">
+                            {{ scan.url }}
+                        </td>
+                        <td>
+                            {% if scan.result == 'Phishing' %}
+                                <span class="badge bg-danger">
+                                    <i class='bx bx-shield-x me-1'></i>{{ scan.result }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-success">
+                                    <i class='bx bx-check-shield me-1'></i>{{ scan.result }}
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="progress-custom mt-4">
+            <div class="progress-bar-custom" data-width="100" style="width: 0%"></div>
+        </div>
+        <p class="text-muted text-center mt-2">
+            <small>Showing your most recent scan results</small>
+        </p>
+    </div>
 </div>
 {% endblock %}
